@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WallTrust — Collect testimonials. Display them anywhere.</title>
+<meta name="description" content="Collect customer testimonials with a shareable link and display them on any website with one line of code. Unlimited testimonials, Google Rich Snippets, no branding — from $7/mo.">
+<meta property="og:title" content="WallTrust — Collect testimonials. Display them anywhere.">
+<meta property="og:description" content="Unlimited testimonials, Google Rich Snippets, no branding — from $7/mo.">
+<meta property="og:url" content="https://walltrust.app">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #F7F9FC;
+    --surface:  #FFFFFF;
+    --indigo:   #3730A3;
+    --indigo-l: #EEF2FF;
+    --indigo-m: #6366F1;
+    --text:     #0F172A;
+    --muted:    #64748B;
+    --border:   #E2E8F0;
+    --green:    #059669;
+    --green-l:  #ECFDF5;
+    --r:        12px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(247,249,252,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    color: var(--indigo);
+    text-decoration: none;
+    letter-spacing: -0.5px;
+  }
+  .nav-right { display: flex; gap: 12px; align-items: center; }
+  .nav-link {
+    font-size: 14px;
+    color: var(--muted);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color .15s;
+  }
+  .nav-link:hover { color: var(--text); }
+  .btn-nav {
+    background: var(--indigo);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background .15s;
+  }
+  .btn-nav:hover { background: #312E81; }
+
+  /* HERO */
+  .hero {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 24px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .hero-left {}
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--green-l);
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    letter-spacing: 0.02em;
+  }
+  .hero-eyebrow span { width: 6px; height: 6px; background: var(--green); border-radius: 50%; display: inline-block; }
+  .hero-h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 5vw, 52px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-h1 em {
+    font-style: normal;
+    color: var(--indigo);
+  }
+  .hero-sub {
+    font-size: 17px;
+    color: var(--muted);
+    margin-bottom: 32px;
+    line-height: 1.7;
+  }
+  .hero-sub strong { color: var(--text); }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .btn-primary {
+    background: var(--indigo);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background .15s, transform .1s;
+  }
+  .btn-primary:hover { background: #312E81; transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 24px;
+    font-size: 15px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: border-color .15s, color .15s;
+  }
+  .btn-ghost:hover { border-color: var(--indigo-m); color: var(--indigo); }
+  .hero-note {
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* LIVE WIDGET DEMO */
+  .hero-right {
+    position: relative;
+  }
+  .widget-demo {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 24px rgba(55,48,163,0.08), 0 1px 4px rgba(0,0,0,0.04);
+    overflow: hidden;
+  }
+  .widget-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .widget-label::before {
+    content: '';
+    width: 8px; height: 8px;
+    background: var(--indigo-m);
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .cards-track {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    animation: scrollUp 14s linear infinite;
+  }
+  @keyframes scrollUp {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+  }
+  .t-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    flex-shrink: 0;
+  }
+  .t-stars { color: #F59E0B; font-size: 13px; margin-bottom: 8px; letter-spacing: 1px; }
+  .t-text { font-size: 13px; color: var(--text); line-height: 1.5; margin-bottom: 10px; }
+  .t-author { display: flex; align-items: center; gap: 8px; }
+  .t-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .t-name { font-size: 12px; font-weight: 600; color: var(--text); }
+  .t-role { font-size: 11px; color: var(--muted); }
+  .widget-footer {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .embed-code {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: var(--indigo-m);
+    background: var(--indigo-l);
+    padding: 4px 8px;
+    border-radius: 5px;
+  }
+  .widget-rating {
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .widget-rating strong { color: var(--text); }
+
+  /* PAIN STRIP */
+  .pain-strip {
+    background: var(--text);
+    padding: 48px 24px;
+  }
+  .pain-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .pain-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94A3B8;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .pain-h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(22px, 3.5vw, 32px);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.25;
+    margin-bottom: 36px;
+    letter-spacing: -0.5px;
+  }
+  .pain-h2 span { color: #F87171; }
+  .pain-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .pain-item {
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: left;
+  }
+  .pain-tool {
+    font-size: 13px;
+    font-weight: 700;
+    color: #94A3B8;
+    margin-bottom: 8px;
+  }
+  .pain-issue {
+    font-size: 14px;
+    color: #F1F5F9;
+    line-height: 1.5;
+  }
+  .pain-price {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #F87171;
+    background: rgba(248,113,113,0.12);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .pain-vs {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 15px;
+    color: #94A3B8;
+  }
+  .pain-vs strong {
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+  }
+  .badge-green {
+    background: var(--green);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  /* HOW IT WORKS */
+  .how {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 24px;
+    text-align: center;
+  }
+  .section-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--indigo-m);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 700;
+    letter-spacing: -0.8px;
+    line-height: 1.15;
+    margin-bottom: 48px;
+  }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    text-align: left;
+  }
+  .step {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 24px;
+    position: relative;
+  }
+  .step-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--indigo-l);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+  .step-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .step-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* FEATURES */
+  .features {
+    background: var(--surface);
+    padding: 80px 24px;
+  }
+  .features-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    text-align: left;
+    margin-top: 48px;
+  }
+  .feature-item {
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg);
+  }
+  .feature-icon {
+    width: 36px; height: 36px;
+    background: var(--indigo-l);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    margin-bottom: 14px;
+  }
+  .feature-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .feature-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* PRICING */
+  .pricing {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 24px;
+    text-align: center;
+  }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 48px;
+    text-align: left;
+  }
+  .plan {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 24px;
+  }
+  .plan.featured {
+    border: 2px solid var(--indigo);
+    position: relative;
+  }
+  .plan-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--indigo);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    letter-spacing: 0.05em;
+  }
+  .plan-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+  .plan-price {
+    font-family: 'Syne', sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+  .plan-price sup { font-size: 20px; vertical-align: top; margin-top: 8px; display: inline-block; }
+  .plan-price span { font-size: 15px; font-weight: 400; color: var(--muted); font-family: 'Inter', sans-serif; }
+  .plan-desc { font-size: 13px; color: var(--muted); margin: 10px 0 20px; line-height: 1.5; }
+  .plan-features { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+  .plan-features li { font-size: 13px; color: var(--text); display: flex; gap: 8px; align-items: flex-start; }
+  .plan-features li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+  .plan-features li.muted-feat::before { content: '–'; color: var(--border); }
+  .plan-features li.muted-feat { color: var(--muted); }
+  .btn-plan {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    transition: all .15s;
+  }
+  .btn-plan:hover { border-color: var(--indigo); color: var(--indigo); }
+  .btn-plan.featured {
+    background: var(--indigo);
+    border-color: var(--indigo);
+    color: #fff;
+  }
+  .btn-plan.featured:hover { background: #312E81; }
+  .pricing-note {
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* FAQ */
+  .faq {
+    background: var(--surface);
+    padding: 80px 24px;
+  }
+  .faq-inner {
+    max-width: 680px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .faq-list {
+    margin-top: 40px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .faq-item {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .faq-q {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 18px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .faq-q:hover { background: var(--bg); }
+  .faq-icon { font-size: 18px; color: var(--muted); flex-shrink: 0; transition: transform .2s; }
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+  .faq-a {
+    display: none;
+    padding: 0 20px 18px;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .faq-item.open .faq-a { display: block; }
+
+  /* CTA FOOTER */
+  .cta-section {
+    background: var(--indigo);
+    padding: 80px 24px;
+    text-align: center;
+  }
+  .cta-h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+  .cta-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 32px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .btn-white {
+    background: #fff;
+    color: var(--indigo);
+    border: none;
+    border-radius: 10px;
+    padding: 14px 32px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform .1s, box-shadow .15s;
+  }
+  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+  .cta-note { margin-top: 12px; font-size: 13px; color: rgba(255,255,255,0.55); }
+
+  /* FOOTER */
+  footer {
+    background: var(--text);
+    padding: 32px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: #fff;
+    text-decoration: none;
+  }
+  .footer-copy { font-size: 13px; color: #64748B; }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a { font-size: 13px; color: #64748B; text-decoration: none; }
+  .footer-links a:hover { color: #94A3B8; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; gap: 40px; padding: 48px 20px 40px; }
+    .hero-right { order: -1; }
+    .pain-grid, .steps, .feature-grid, .pricing-grid { grid-template-columns: 1fr; }
+    nav { padding: 0 16px; }
+    .nav-link { display: none; }
+    footer { flex-direction: column; text-align: center; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cards-track { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">WallTrust</a>
+  <div class="nav-right">
+    <a href="#pricing" class="nav-link">Pricing</a>
+    <a href="#faq" class="nav-link">FAQ</a>
+    <a href="#waitlist" class="btn-nav">Start free</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow"><span></span> Launching soon — join the waitlist</div>
+    <h1 class="hero-h1">Your customers trust you.<br><em>Show the world.</em></h1>
+    <p class="hero-sub">
+      Collect testimonials with a shareable link. Display them on any website with one line of code.<br>
+      <strong>Unlimited testimonials. Google Rich Snippets. No branding.</strong> From $7/mo.
+    </p>
+    <div class="hero-actions">
+      <a href="#waitlist" class="btn-primary">Start free — no card needed</a>
+      <a href="#how" class="btn-ghost">See how it works</a>
+    </div>
+    <p class="hero-note">Free plan available · Cancel anytime in 1 click · No chatbot support</p>
+  </div>
+
+  <div class="hero-right">
+    <div class="widget-demo">
+      <div class="widget-label">Live widget preview</div>
+      <div style="height: 260px; overflow: hidden; position: relative;">
+        <div class="cards-track">
+          <!-- set 1 -->
+          <div class="t-card">
+            <div class="t-stars">★★★★★</div>
+            <div class="t-text">"Finally a tool that doesn't charge $80/mo just to show star ratings in Google. Set it up in 10 minutes."</div>
+            <div class="t-author">
+              <div class="t-avatar" style="background:#6366F1">S</div>
+              <div><div class="t-name">Sarah M.</div><div class="t-role">Freelance Designer</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <div class="t-stars">★★★★★</div>
+            <div class="t-text">"The embed widget looks native on my site. Clients started commenting on my testimonial section within a week."</div>
+            <div class="t-author">
+              <div class="t-avatar" style="background:#059669">J</div>
+              <div><div class="t-name">James K.</div><div class="t-role">Business Coach</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <div class="t-stars">★★★★★</div>
+            <div class="t-text">"Switched from Testimonial.to. Same features, 10x cheaper, and actually unlimited testimonials. No brainer."</div>
+            <div class="t-author">
+              <div class="t-avatar" style="background:#F59E0B">A</div>
+              <div><div class="t-name">Alex T.</div><div class="t-role">SaaS Founder</div></div>
+            </div>
+          </div>
+          <!-- set 2 (duplicate for seamless loop) -->
+          <div class="t-card">
+            <div class="t-stars">★★★★★</div>
+            <div class="t-text">"Finally a tool that doesn't charge $80/mo just to show star ratings in Google. Set it up in 10 minutes."</div>
+            <div class="t-author">
+              <div class="t-avatar" style="background:#6366F1">S</div>
+              <div><div class="t-name">Sarah M.</div><div class="t-role">Freelance Designer</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <div class="t-stars">★★★★★</div>
+            <div class="t-text">"The embed widget looks native on my site. Clients started commenting on my testimonial section within a week."</div>
+            <div class="t-author">
+              <div class="t-avatar" style="background:#059669">J</div>
+              <div><div class="t-name">James K.</div><div class="t-role">Business Coach</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <div class="t-stars">★★★★★</div>
+            <div class="t-text">"Switched from Testimonial.to. Same features, 10x cheaper, and actually unlimited testimonials. No brainer."</div>
+            <div class="t-author">
+              <div class="t-avatar" style="background:#F59E0B">A</div>
+              <div><div class="t-name">Alex T.</div><div class="t-role">SaaS Founder</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="widget-footer">
+        <span class="embed-code">&lt;script src="walltrust.app/w/..."&gt;</span>
+        <span class="widget-rating">⭐ <strong>4.9</strong> / 5 · 24 reviews</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAIN STRIP -->
+<section class="pain-strip">
+  <div class="pain-inner">
+    <div class="pain-label">Why WallTrust exists</div>
+    <h2 class="pain-h2">Other tools lock basic features behind <span>expensive tiers</span></h2>
+    <div class="pain-grid">
+      <div class="pain-item">
+        <div class="pain-tool">Testimonial.to</div>
+        <div class="pain-issue">Google Rich Snippets (stars in Google) locked behind Ultimate plan</div>
+        <span class="pain-price">$80/mo for stars</span>
+      </div>
+      <div class="pain-item">
+        <div class="pain-tool">Senja</div>
+        <div class="pain-issue">Free plan capped at 15 testimonials total. Hit the limit fast.</div>
+        <span class="pain-price">15 testimonials max free</span>
+      </div>
+      <div class="pain-item">
+        <div class="pain-tool">Famewall</div>
+        <div class="pain-issue">No Google Rich Snippets at any price point. Basic widget only.</div>
+        <span class="pain-price">No rich snippets ever</span>
+      </div>
+    </div>
+    <div class="pain-vs">
+      <strong>WallTrust</strong> — unlimited testimonials + rich snippets + no branding
+      <span class="badge-green">from $7/mo</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="section-eyebrow">How it works</div>
+  <h2 class="section-h2">From zero to embedded<br>in under 10 minutes</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-title">Create your collection page</div>
+      <div class="step-desc">Set up a branded page in 30 seconds. Add your logo, a custom question, and a star rating field. You get a shareable link instantly.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-title">Share it with your clients</div>
+      <div class="step-desc">Send the link via email, add it to your invoice footer, or put a QR code on your desk. Clients submit without creating an account.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-title">Embed on your site</div>
+      <div class="step-desc">Copy one line of code. Paste it anywhere — WordPress, Webflow, Framer, plain HTML. Your testimonial wall updates automatically.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="features-inner">
+    <div class="section-eyebrow">Features</div>
+    <h2 class="section-h2">Everything you need.<br>Nothing you don't.</h2>
+    <div class="feature-grid">
+      <div class="feature-item">
+        <div class="feature-icon">⭐</div>
+        <div class="feature-title">Google Rich Snippets</div>
+        <div class="feature-desc">Auto-generated JSON-LD markup so your star ratings appear directly in Google search results. Included from $7/mo.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">∞</div>
+        <div class="feature-title">Unlimited testimonials</div>
+        <div class="feature-desc">No caps, no "upgrade to collect more" walls. Collect as many testimonials as your business earns on any paid plan.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🎨</div>
+        <div class="feature-title">No branding on widgets</div>
+        <div class="feature-desc">Your site, your brand. No "Powered by WallTrust" badge on paid plans. Your testimonials look native from day one.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🔗</div>
+        <div class="feature-title">One-line embed</div>
+        <div class="feature-desc">One script tag. Works on any website, CMS, or page builder. No plugins, no API keys, no developer needed.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">✅</div>
+        <div class="feature-title">Moderation dashboard</div>
+        <div class="feature-desc">Approve, reject, or feature testimonials with one click. You control what goes public — always.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📱</div>
+        <div class="feature-title">Mobile-friendly forms</div>
+        <div class="feature-desc">Your clients submit from any device. The collection form works perfectly on phones — no app download required.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-eyebrow">Pricing</div>
+  <h2 class="section-h2">Flat pricing. No tricks.<br>Cancel in 1 click.</h2>
+  <div class="pricing-grid">
+    <div class="plan">
+      <div class="plan-name">Free</div>
+      <div class="plan-price"><sup>$</sup>0<span>/mo</span></div>
+      <div class="plan-desc">Try it out. No card required.</div>
+      <ul class="plan-features">
+        <li>5 testimonials</li>
+        <li>1 collection page</li>
+        <li>Embed widget</li>
+        <li class="muted-feat">WallTrust branding on widget</li>
+        <li class="muted-feat">No Google Rich Snippets</li>
+        <li class="muted-feat">1 project only</li>
+      </ul>
+      <a href="#waitlist" class="btn-plan">Get started free</a>
+    </div>
+    <div class="plan featured">
+      <div class="plan-badge">MOST POPULAR</div>
+      <div class="plan-name">Starter</div>
+      <div class="plan-price"><sup>$</sup>7<span>/mo</span></div>
+      <div class="plan-desc">For freelancers and solopreneurs.</div>
+      <ul class="plan-features">
+        <li>Unlimited testimonials</li>
+        <li>3 collection pages</li>
+        <li>Widget without branding</li>
+        <li>Google Rich Snippets ⭐</li>
+        <li>Moderation dashboard</li>
+        <li>Email notifications</li>
+      </ul>
+      <a href="#waitlist" class="btn-plan featured">Start Starter plan</a>
+    </div>
+    <div class="plan">
+      <div class="plan-name">Pro</div>
+      <div class="plan-price"><sup>$</sup>19<span>/mo</span></div>
+      <div class="plan-desc">For agencies and growing teams.</div>
+      <ul class="plan-features">
+        <li>Everything in Starter</li>
+        <li>Unlimited collection pages</li>
+        <li>Custom domain for pages</li>
+        <li>Analytics & click tracking</li>
+        <li>CSV export</li>
+        <li>Priority support</li>
+      </ul>
+      <a href="#waitlist" class="btn-plan">Start Pro plan</a>
+    </div>
+  </div>
+  <p class="pricing-note">All plans include a free tier to start. Cancel anytime — no chatbot, no waiting, no questions asked.</p>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="faq-inner">
+    <div class="section-eyebrow">FAQ</div>
+    <h2 class="section-h2">Questions you'd ask<br>before signing up</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Can I really cancel anytime?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Yes. One click in your account settings — no chatbot, no cancellation survey, no waiting period. Your plan stops at the end of the billing cycle and you keep access until then.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What are Google Rich Snippets exactly?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">They're the star ratings that appear under your website name in Google search results. They increase click-through rates by up to 30%. WallTrust generates the required JSON-LD markup automatically — you just copy-paste two lines into your site's head tag.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Do my clients need to create an account to leave a testimonial?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">No. They just click your collection link, fill out the form, and submit. No signup, no password, no friction. That's why collection rates are higher.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What does "no branding" mean on paid plans?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">On the Starter and Pro plans, the embedded widget on your website shows your testimonials only — no "Powered by WallTrust" badge, no logo, no link back to us. It looks like a native part of your site.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Which website builders does the embed work with?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Any platform that lets you add HTML or a script tag: WordPress, Webflow, Framer, Squarespace, Wix, Shopify, plain HTML, and more. If you can paste code, it works.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA / WAITLIST -->
+<section class="cta-section" id="waitlist">
+  <h2 class="cta-h2">Build your wall of trust today.</h2>
+  <p class="cta-sub">Join the waitlist and get 3 months of Starter free when we launch.</p>
+  <form onsubmit="handleSubmit(event)" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:440px;margin:0 auto;">
+    <input
+      type="email"
+      id="email-input"
+      placeholder="your@email.com"
+      required
+      style="flex:1;min-width:200px;padding:14px 18px;border-radius:10px;border:none;font-size:15px;font-family:'Inter',sans-serif;outline:none;"
+    >
+    <button type="submit" class="btn-white" style="white-space:nowrap;">Join waitlist</button>
+  </form>
+  <p class="cta-note" id="submit-msg">No spam. Launch notification only.</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="/" class="footer-logo">WallTrust</a>
+  <span class="footer-copy">© 2026 WallTrust. All rights reserved.</span>
+  <div class="footer-links">
+    <a href="mailto:hello@walltrust.app">Contact</a>
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+  </div>
+</footer>
+
+<script>
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  item.classList.toggle('open');
+}
+
+function handleSubmit(e) {
+  e.preventDefault();
+  const email = document.getElementById('email-input').value;
+  const msg = document.getElementById('submit-msg');
+  // In production: send to your API or Resend
+  msg.textContent = '✓ You\'re on the list! We\'ll email you at launch.';
+  msg.style.color = '#86EFAC';
+  document.getElementById('email-input').value = '';
+}
+</script>
+
+</body>
+</html>
