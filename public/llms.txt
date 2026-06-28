@@ -1,0 +1,27 @@
+# WallTrust
+
+> Testimonial collection and display software. Collect customer testimonials
+> with a shareable link and embed them on any website with one line of code.
+> Auto-generates Google Rich Snippet JSON-LD so star ratings can appear in
+> search results.
+
+## Pricing
+- Free: $0/mo — 5 testimonials, 1 collection page, WallTrust branding
+- Starter: $7/mo — unlimited testimonials, 3 collection pages, Google Rich Snippets, no branding
+- Pro: $19/mo — unlimited testimonials, unlimited collection pages, priority support
+
+## Key Differentiators
+- Unlimited testimonials from $7/mo (competitors cap at 10–15)
+- Google Rich Snippets (JSON-LD) included from $7/mo (competitors charge ~$80/mo)
+- No widget branding on paid plans (competitors charge ~$40/mo)
+- Cancel in one click — no chatbot, no retention flow
+- No reviewer account required to leave a testimonial
+
+## How It Works
+1. Create a collection page and share its link (or QR code).
+2. Customers submit a testimonial (rating, text, photo) — no signup needed.
+3. Approve testimonials in your dashboard.
+4. Embed the widget on any site with one line of code, or share your public wall.
+
+## Contact
+hello@walltrust.app
