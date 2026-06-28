@@ -5,6 +5,11 @@ import type { NextAuthConfig } from "next-auth";
  * Imported by middleware.ts AND spread into the full config in auth.ts.
  */
 export const authConfig = {
+  // Read the secret explicitly so it works regardless of env var name
+  // (Auth.js v5 prefers AUTH_SECRET; we also support the v4-style NEXTAUTH_SECRET).
+  secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET,
+  // Trust the deployment host (Vercel) so the Edge middleware doesn't throw UntrustedHost.
+  trustHost: true,
   session: { strategy: "jwt" },
   pages: { signIn: "/auth/login", error: "/auth/login" },
   providers: [], // real providers are attached in auth.ts
