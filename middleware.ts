@@ -1,24 +1,31 @@
-import NextAuth from "next-auth";
-import { NextResponse } from "next/server";
-import { authConfig } from "./auth.config";
+import { NextResponse, type NextRequest } from "next/server";
 
-// Edge-safe NextAuth instance (no providers that touch the DB).
-const { auth } = NextAuth(authConfig);
+/**
+ * Lightweight, Edge-safe middleware. It does NOT initialize NextAuth/Auth.js
+ * (that pulls @auth/core + jose into the Edge bundle, which crashed the
+ * middleware on Vercel — MIDDLEWARE_INVOCATION_FAILED). Here we only do a fast
+ * UX redirect based on the presence of the session cookie. The authoritative
+ * auth check still runs server-side in the dashboard layout via `auth()`.
+ */
+const SESSION_COOKIES = [
+  "authjs.session-token",
+  "__Secure-authjs.session-token",
+];
 
-export default auth((req) => {
-  const isLoggedIn = !!req.auth;
+export function middleware(req: NextRequest) {
+  const hasSession = SESSION_COOKIES.some((name) => req.cookies.has(name));
   const { pathname } = req.nextUrl;
   const isDashboard = pathname.startsWith("/dashboard");
   const isAuthRoute = pathname.startsWith("/auth");
 
-  if (isDashboard && !isLoggedIn) {
+  if (isDashboard && !hasSession) {
     return NextResponse.redirect(new URL("/auth/login", req.nextUrl));
   }
-  if (isAuthRoute && isLoggedIn) {
+  if (isAuthRoute && hasSession) {
     return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
   }
   return NextResponse.next();
-});
+}
 
 export const config = {
   matcher: [
