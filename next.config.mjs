@@ -11,6 +11,18 @@ const nextConfig = {
       { source: "/", destination: "/index.html" },
     ];
   },
+  async redirects() {
+    // Consolidate the older /alternatives/* comparison URLs into /compare/*
+    // (single canonical comparison hub — avoids duplicate content).
+    return [
+      {
+        source: "/alternatives/:slug",
+        destination: "/compare/:slug",
+        permanent: true,
+      },
+      { source: "/alternatives", destination: "/compare", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;
