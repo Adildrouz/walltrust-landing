@@ -681,11 +681,13 @@
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Web",
       "description": "Collect customer testimonials with a shareable link and display them on any website with one line of code. Unlimited testimonials, Google Rich Snippets, no branding — from $7/mo.",
-      "offers": [
-        { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD" },
-        { "@type": "Offer", "name": "Starter", "price": "7", "priceCurrency": "USD" },
-        { "@type": "Offer", "name": "Pro", "price": "19", "priceCurrency": "USD" }
-      ],
+      "offers": {
+        "@type": "AggregateOffer",
+        "lowPrice": "0",
+        "highPrice": "19",
+        "priceCurrency": "USD",
+        "offerCount": "3"
+      },
       "publisher": { "@id": "https://www.walltrust.app/#organization" }
     },
     {
