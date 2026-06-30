@@ -58,6 +58,56 @@ export async function sendNewTestimonialEmail(
   });
 }
 
+export async function sendWaitlistConfirmationEmail(email: string) {
+  await resend.emails.send({
+    from: FROM,
+    to: email,
+    subject: "You're on the WallTrust waitlist 🎉",
+    html: `
+      <div style="font-family:Inter,sans-serif;max-width:480px;margin:0 auto;padding:32px 24px">
+        <h1 style="font-size:22px;font-weight:700;color:#0f172a;margin-bottom:12px">You're in!</h1>
+        <p style="color:#64748b;line-height:1.6">
+          When WallTrust launches, you'll get <strong>3 months of the Starter plan free</strong>
+          (a $21 value) — unlimited testimonials, Google Rich Snippets, no widget branding.
+        </p>
+        <p style="color:#64748b;line-height:1.6;margin-top:16px">
+          I'll email you the moment we go live. No spam before then.
+        </p>
+        <p style="color:#94a3b8;font-size:13px;margin-top:32px">
+          — Adil, WallTrust founder<br>
+          P.S. Reply to this email if you have a specific testimonial
+          collection problem — I read every reply.
+        </p>
+      </div>
+    `,
+  });
+}
+
+export async function sendWaitlistLaunchEmail(email: string, couponCode: string) {
+  await resend.emails.send({
+    from: FROM,
+    to: email,
+    subject: "WallTrust is live — your 3 free months are ready",
+    html: `
+      <div style="font-family:Inter,sans-serif;max-width:480px;margin:0 auto;padding:32px 24px">
+        <h1 style="font-size:22px;font-weight:700;color:#0f172a;margin-bottom:12px">WallTrust is live 🚀</h1>
+        <p style="color:#64748b;line-height:1.6">
+          Your 3 months of Starter plan are ready. Use this code at checkout:
+        </p>
+        <div style="background:#EEF2FF;color:#3730A3;font-size:18px;font-weight:700;padding:12px 20px;border-radius:8px;text-align:center;margin:20px 0;letter-spacing:1px">
+          ${couponCode}
+        </div>
+        <a href="${BASE_URL}/auth/signup" style="background:#3730a3;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-block">
+          Create your account
+        </a>
+        <p style="color:#94a3b8;font-size:13px;margin-top:24px">
+          Questions? Just reply to this email.
+        </p>
+      </div>
+    `,
+  });
+}
+
 export async function sendRenewalReminderEmail(
   email: string,
   name: string,
