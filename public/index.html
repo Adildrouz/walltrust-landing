@@ -1029,14 +1029,33 @@ function toggleFaq(btn) {
   item.classList.toggle('open');
 }
 
-function handleSubmit(e) {
+async function handleSubmit(e) {
   e.preventDefault();
-  const email = document.getElementById('email-input').value;
+  const emailInput = document.getElementById('email-input');
   const msg = document.getElementById('submit-msg');
-  // In production: send to your API or Resend
-  msg.textContent = '✓ You\'re on the list! We\'ll email you at launch.';
-  msg.style.color = '#86EFAC';
-  document.getElementById('email-input').value = '';
+  const email = emailInput.value.trim();
+
+  if (msg) { msg.textContent = 'Submitting…'; msg.style.color = ''; }
+
+  try {
+    const res = await fetch('/api/waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        source: new URLSearchParams(window.location.search).get('utm_source') || 'direct',
+      }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      if (msg) { msg.textContent = '✓ ' + data.message; msg.style.color = '#86EFAC'; }
+      emailInput.value = '';
+    } else {
+      if (msg) { msg.textContent = data.error || 'Something went wrong'; msg.style.color = '#F87171'; }
+    }
+  } catch {
+    if (msg) { msg.textContent = 'Network error. Please try again.'; msg.style.color = '#F87171'; }
+  }
 }
 </script>
 

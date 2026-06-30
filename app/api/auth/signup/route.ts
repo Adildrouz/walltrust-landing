@@ -8,6 +8,7 @@ import CollectionPage from "@/models/CollectionPage";
 import WidgetConfig from "@/models/WidgetConfig";
 import { sendVerificationEmail } from "@/lib/resend";
 import { generateUsername } from "@/lib/utils";
+import WaitlistEntry from "@/models/WaitlistEntry";
 
 const signupSchema = z.object({
   name: z.string().min(2, "Name is too short").max(80),
@@ -67,6 +68,12 @@ export async function POST(req: Request) {
       description: "I'd love to hear about your experience.",
     });
     await WidgetConfig.create({ userId: user._id });
+
+    // Mark waitlist entry as converted if email was on the list
+    WaitlistEntry.findOneAndUpdate(
+      { email: email.toLowerCase() },
+      { status: "converted", convertedAt: new Date() }
+    ).catch((e) => console.error("Waitlist conversion update failed:", e));
 
     try {
       await sendVerificationEmail(user.email, name, verificationToken);
