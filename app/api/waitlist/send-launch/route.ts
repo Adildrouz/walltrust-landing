@@ -20,7 +20,11 @@ export async function POST(req: Request) {
   }
 
   const body = await req.json().catch(() => ({}));
-  const targetEmail: string | undefined = body?.email;
+  const rawEmail: unknown = body?.email;
+  const targetEmail: string | undefined =
+    typeof rawEmail === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(rawEmail)
+      ? rawEmail.toLowerCase().trim()
+      : undefined;
 
   await connectDB();
 
