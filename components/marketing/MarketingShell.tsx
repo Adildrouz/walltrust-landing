@@ -12,6 +12,8 @@ const footerColumns: { title: string; links: { label: string; href: string }[] }
       { label: "vs SayWall", href: "/compare/saywall-alternative" },
       { label: "vs Famewall", href: "/compare/famewall-alternative" },
       { label: "vs Trustmary", href: "/compare/trustmary-alternative" },
+      { label: "vs WiserReview", href: "/compare/wiserreview-alternative" },
+      { label: "vs EmbedSocial", href: "/compare/embedsocial-alternative" },
     ],
   },
   {

@@ -4,10 +4,44 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = process.env.EMAIL_FROM || "hello@walltrust.app";
 const BASE_URL = process.env.NEXTAUTH_URL || "http://localhost:3000";
 
+// Playwright's webServer sets this so e2e runs never hit the real Resend
+// API — every test-run signup would otherwise send (and bounce) a real
+// email to a fake @walltrust-e2e.test address, hurting sender reputation.
+const TEST_MODE = process.env.PLAYWRIGHT_TEST === "1";
+
+export interface TestEmailLogEntry {
+  to: string;
+  subject: string;
+  from: string;
+  html: string;
+}
+
+// In-memory record of "sent" emails in test mode, so e2e tests (which run
+// in a separate process from this dev server) can assert on recipient/
+// subject/from/body via the introspection endpoint at
+// app/api/test/emails/route.ts. Never populated outside PLAYWRIGHT_TEST.
+const testEmailLog: TestEmailLogEntry[] = [];
+
+export function getTestEmailLog(): TestEmailLogEntry[] {
+  return testEmailLog;
+}
+
+export function clearTestEmailLog(): void {
+  testEmailLog.length = 0;
+}
+
+async function send(payload: { to: string; subject: string; html: string }) {
+  if (TEST_MODE) {
+    testEmailLog.push({ ...payload, from: FROM });
+    console.log(`[resend:test-mode] skipped send — to=${payload.to} subject="${payload.subject}"`);
+    return;
+  }
+  await resend.emails.send({ from: FROM, ...payload });
+}
+
 export async function sendVerificationEmail(email: string, name: string, token: string) {
   const url = `${BASE_URL}/api/auth/verify-email?token=${token}`;
-  await resend.emails.send({
-    from: FROM,
+  await send({
     to: email,
     subject: "Verify your WallTrust account",
     html: `
@@ -23,8 +57,7 @@ export async function sendVerificationEmail(email: string, name: string, token: 
 
 export async function sendPasswordResetEmail(email: string, name: string, token: string) {
   const url = `${BASE_URL}/auth/reset-password?token=${token}`;
-  await resend.emails.send({
-    from: FROM,
+  await send({
     to: email,
     subject: "Reset your WallTrust password",
     html: `
@@ -44,8 +77,7 @@ export async function sendNewTestimonialEmail(
   authorName: string,
   pageTitle: string
 ) {
-  await resend.emails.send({
-    from: FROM,
+  await send({
     to: email,
     subject: `New testimonial from ${authorName}`,
     html: `
@@ -58,9 +90,36 @@ export async function sendNewTestimonialEmail(
   });
 }
 
+export async function sendDuplicateSignupEmail(email: string) {
+  const loginUrl = `${BASE_URL}/auth/signin`;
+  const resetUrl = `${BASE_URL}/auth/forgot-password`;
+  await send({
+    to: email,
+    subject: "Someone tried to create a WallTrust account with your email",
+    html: `
+      <div style="font-family:Inter,sans-serif;max-width:480px;margin:0 auto;padding:32px 24px">
+        <h1 style="font-size:20px;font-weight:700;color:#0f172a;margin-bottom:8px">Heads up</h1>
+        <p style="color:#64748b;line-height:1.6">
+          Someone just tried to sign up for WallTrust using your email address.
+          Your existing account is safe — no changes were made.
+        </p>
+        <p style="color:#64748b;line-height:1.6;margin-top:12px">
+          If that was you and you forgot you already have an account:
+        </p>
+        <div style="margin-top:16px;display:flex;gap:12px">
+          <a href="${loginUrl}" style="background:#3730a3;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-block;margin-right:12px">Sign in</a>
+          <a href="${resetUrl}" style="background:#f1f5f9;color:#0f172a;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-block">Reset password</a>
+        </div>
+        <p style="color:#94a3b8;font-size:12px;margin-top:24px">
+          If you didn't try to sign up, you can safely ignore this email.
+        </p>
+      </div>
+    `,
+  });
+}
+
 export async function sendWaitlistConfirmationEmail(email: string) {
-  await resend.emails.send({
-    from: FROM,
+  await send({
     to: email,
     subject: "You're on the WallTrust waitlist 🎉",
     html: `
@@ -84,8 +143,7 @@ export async function sendWaitlistConfirmationEmail(email: string) {
 }
 
 export async function sendWaitlistLaunchEmail(email: string, couponCode: string) {
-  await resend.emails.send({
-    from: FROM,
+  await send({
     to: email,
     subject: "WallTrust is live — your 3 free months are ready",
     html: `
@@ -114,8 +172,7 @@ export async function sendRenewalReminderEmail(
   plan: string,
   renewalDate: Date
 ) {
-  await resend.emails.send({
-    from: FROM,
+  await send({
     to: email,
     subject: "Your WallTrust subscription renews in 7 days",
     html: `

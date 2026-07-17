@@ -2,7 +2,11 @@ import type { NextAuthConfig } from "next-auth";
 
 /**
  * Edge-safe NextAuth config (no Node-only deps like mongoose/bcrypt).
- * Imported by middleware.ts AND spread into the full config in auth.ts.
+ * Spread into the full config in auth.ts. There is no Edge middleware —
+ * it was removed after triggering MIDDLEWARE_INVOCATION_FAILED on Vercel.
+ * Route protection instead happens per-route via layout-level `redirect()`
+ * guards (see app/(dashboard)/layout.tsx) and page-level checks (see
+ * app/(auth)/auth/login and /signup).
  */
 export const authConfig = {
   // Read the secret explicitly so it works regardless of env var name

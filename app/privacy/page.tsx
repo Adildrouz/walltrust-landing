@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { LegalShell, LegalSection } from "@/components/legal/LegalShell";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy",
+  title: "Privacy Policy — WallTrust",
   description: "How WallTrust collects, uses, and protects your personal data.",
   alternates: { canonical: "/privacy" },
 };

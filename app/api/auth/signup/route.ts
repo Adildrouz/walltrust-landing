@@ -6,9 +6,10 @@ import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import CollectionPage from "@/models/CollectionPage";
 import WidgetConfig from "@/models/WidgetConfig";
-import { sendVerificationEmail } from "@/lib/resend";
+import { sendVerificationEmail, sendDuplicateSignupEmail } from "@/lib/resend";
 import { generateUsername } from "@/lib/utils";
 import WaitlistEntry from "@/models/WaitlistEntry";
+import { isRateLimited, clientIp } from "@/lib/rate-limit";
 
 const signupSchema = z.object({
   name: z.string().min(2, "Name is too short").max(80),
@@ -27,6 +28,14 @@ async function uniqueUsername(name: string): Promise<string> {
 }
 
 export async function POST(req: Request) {
+  // 5 signups per IP per 10 minutes — stops mass account creation
+  if (isRateLimited(clientIp(req), 5, 10 * 60_000, req)) {
+    return NextResponse.json(
+      { error: "Too many requests. Please try again later." },
+      { status: 429 }
+    );
+  }
+
   try {
     const body = await req.json();
     const parsed = signupSchema.safeParse(body);
@@ -42,9 +51,14 @@ export async function POST(req: Request) {
 
     const existing = await User.findOne({ email: email.toLowerCase() });
     if (existing) {
+      // Generic response — don't reveal whether the email is registered.
+      // Notify the account holder so they know their email was used.
+      sendDuplicateSignupEmail(email.toLowerCase()).catch((e) =>
+        console.error("Duplicate signup email failed:", e)
+      );
       return NextResponse.json(
-        { error: "An account with this email already exists." },
-        { status: 409 }
+        { message: "Account created. Check your email to verify your account." },
+        { status: 201 }
       );
     }
 

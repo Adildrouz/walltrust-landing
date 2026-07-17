@@ -39,6 +39,16 @@ export default function CompareIndexPage() {
           description: "Built for solopreneurs, not enterprise — from $7/mo.",
           href: "/compare/trustmary-alternative",
         },
+        {
+          title: "WallTrust vs WiserReview",
+          description: "Built for freelancers, not just e-commerce — no product catalog needed.",
+          href: "/compare/wiserreview-alternative",
+        },
+        {
+          title: "WallTrust vs EmbedSocial",
+          description: "One tool, one job: testimonials only, from $7/mo vs $29/mo.",
+          href: "/compare/embedsocial-alternative",
+        },
       ]}
       ctaHeading="Switch to WallTrust in under 10 minutes"
     />

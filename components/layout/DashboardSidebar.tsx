@@ -13,6 +13,7 @@ import {
   CreditCard,
   LogOut,
   ShieldCheck,
+  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -39,8 +40,12 @@ const planLabel: Record<string, string> = {
 
 export default function DashboardSidebar({
   user,
+  onNavigate,
+  onClose,
 }: {
   user: { name?: string | null; plan?: string; username?: string };
+  onNavigate?: () => void;
+  onClose?: () => void;
 }) {
   const pathname = usePathname();
   const plan = user.plan ?? "free";
@@ -58,8 +63,9 @@ export default function DashboardSidebar({
     return (
       <Link
         href={href}
+        onClick={onNavigate}
         className={cn(
-          "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+          "flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors md:py-2",
           active
             ? "bg-primary text-primary-foreground"
             : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
@@ -79,6 +85,16 @@ export default function DashboardSidebar({
         <Badge variant="secondary" className="ml-auto">
           {planLabel[plan] ?? "Free"}
         </Badge>
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close menu"
+            className="ml-2 p-1 text-slate-500 md:hidden"
+          >
+            <X size={18} />
+          </button>
+        )}
       </div>
 
       <nav className="mt-8 flex flex-1 flex-col gap-1">
@@ -90,6 +106,7 @@ export default function DashboardSidebar({
           {plan === "free" && (
             <Link
               href="/dashboard/billing"
+              onClick={onNavigate}
               className="mb-2 rounded-md bg-indigo-50 px-3 py-2 text-xs font-medium text-primary hover:bg-indigo-100"
             >
               ⚡ Upgrade for unlimited testimonials

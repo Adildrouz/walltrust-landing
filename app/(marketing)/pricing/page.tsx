@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Pricing — WallTrust",
   description:
     "Unlimited testimonials and Google Rich Snippets from $7/mo. No widget branding on paid plans. Cancel in one click.",
+  alternates: { canonical: "/pricing" },
 };
 
 const tiers = [

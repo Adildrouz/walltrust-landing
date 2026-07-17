@@ -4,20 +4,22 @@ Disallow: /dashboard
 Disallow: /api/
 Disallow: /auth/
 
-# AI crawlers — explicitly allowed for citation visibility
 User-agent: GPTBot
 Allow: /
-
-User-agent: ClaudeBot
-Allow: /
+Disallow: /dashboard
+Disallow: /api/
+Disallow: /auth/
 
 User-agent: Claude-Web
 Allow: /
+Disallow: /dashboard
+Disallow: /api/
+Disallow: /auth/
 
 User-agent: PerplexityBot
 Allow: /
-
-User-agent: Google-Extended
-Allow: /
+Disallow: /dashboard
+Disallow: /api/
+Disallow: /auth/
 
 Sitemap: https://www.walltrust.app/sitemap.xml
