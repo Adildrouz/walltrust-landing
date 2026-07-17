@@ -995,21 +995,11 @@
   </div>
 </section>
 
-<!-- CTA / WAITLIST -->
-<section class="cta-section" id="waitlist">
+<!-- CTA -->
+<section class="cta-section" id="cta">
   <h2 class="cta-h2">Build your wall of trust today.</h2>
-  <p class="cta-sub">Join the waitlist and get 3 months of Starter free when we launch.</p>
-  <form onsubmit="handleSubmit(event)" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:440px;margin:0 auto;">
-    <input
-      type="email"
-      id="email-input"
-      placeholder="your@email.com"
-      required
-      style="flex:1;min-width:200px;padding:14px 18px;border-radius:10px;border:none;font-size:15px;font-family:'Inter',sans-serif;outline:none;"
-    >
-    <button type="submit" class="btn-white" style="white-space:nowrap;">Join waitlist</button>
-  </form>
-  <p class="cta-note" id="submit-msg">No spam. Launch notification only.</p>
+  <p class="cta-sub">Start free — no credit card needed. Cancel anytime.</p>
+  <a href="/auth/signup" class="btn-white">Start free</a>
 </section>
 
 <!-- FOOTER -->
@@ -1027,35 +1017,6 @@
 function toggleFaq(btn) {
   const item = btn.closest('.faq-item');
   item.classList.toggle('open');
-}
-
-async function handleSubmit(e) {
-  e.preventDefault();
-  const emailInput = document.getElementById('email-input');
-  const msg = document.getElementById('submit-msg');
-  const email = emailInput.value.trim();
-
-  if (msg) { msg.textContent = 'Submitting…'; msg.style.color = ''; }
-
-  try {
-    const res = await fetch('/api/waitlist', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email,
-        source: new URLSearchParams(window.location.search).get('utm_source') || 'direct',
-      }),
-    });
-    const data = await res.json();
-    if (res.ok) {
-      if (msg) { msg.textContent = '✓ ' + data.message; msg.style.color = '#86EFAC'; }
-      emailInput.value = '';
-    } else {
-      if (msg) { msg.textContent = data.error || 'Something went wrong'; msg.style.color = '#F87171'; }
-    }
-  } catch {
-    if (msg) { msg.textContent = 'Network error. Please try again.'; msg.style.color = '#F87171'; }
-  }
 }
 </script>
 
