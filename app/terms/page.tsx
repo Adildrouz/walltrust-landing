@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { LegalShell, LegalSection } from "@/components/legal/LegalShell";
 
 export const metadata: Metadata = {
-  title: "Terms of Service",
+  title: "Terms of Service — WallTrust",
   description: "The terms governing your use of WallTrust.",
   alternates: { canonical: "/terms" },
 };

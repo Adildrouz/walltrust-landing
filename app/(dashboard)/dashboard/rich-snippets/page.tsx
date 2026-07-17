@@ -60,7 +60,7 @@ export default async function RichSnippetsPage() {
       />
       <div className="space-y-6 p-6">
         {!hasFeature ? (
-          <Card>
+          <Card data-testid="upgrade-prompt">
             <CardContent className="flex flex-col items-center gap-3 py-14 text-center">
               <div className="rounded-full bg-indigo-50 p-3">
                 <Lock className="text-primary" size={26} />
@@ -100,7 +100,7 @@ export default async function RichSnippetsPage() {
             <div>
               <h3 className="mb-2 text-sm font-medium">How it looks in Google</h3>
               <Card>
-                <CardContent className="space-y-1 p-5">
+                <CardContent className="space-y-1 p-5" data-testid="google-preview">
                   <div className="text-xs text-emerald-700">{BASE_URL.replace(/^https?:\/\//, "")}</div>
                   <div className="text-lg text-[#1a0dab]">{session!.user.name} — Reviews</div>
                   <div className="flex items-center gap-1.5 text-sm text-slate-600">
@@ -136,7 +136,7 @@ export default async function RichSnippetsPage() {
               </div>
               <div className="rounded-lg bg-slate-900 p-4">
                 <pre className="overflow-x-auto text-xs text-slate-100">
-                  <code>{code}</code>
+                  <code data-testid="jsonld-code">{code}</code>
                 </pre>
               </div>
             </div>

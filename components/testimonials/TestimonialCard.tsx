@@ -44,7 +44,12 @@ export function TestimonialCard({
   const subtitle = [t.authorTitle, t.authorCompany].filter(Boolean).join(", ");
 
   return (
-    <Card className={cn(t.featured && "ring-2 ring-amber-300")}>
+    <Card
+      className={cn(t.featured && "ring-2 ring-amber-300")}
+      data-testid="testimonial-card"
+      data-testimonial-id={t._id}
+      data-status={t.status}
+    >
       <CardContent className="space-y-3 p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">
@@ -92,7 +97,13 @@ export function TestimonialCard({
               </Button>
             )}
             {t.status !== "rejected" && (
-              <Button size="sm" variant="ghost" disabled={busy} onClick={() => onReject(t._id)}>
+              <Button
+                size="sm"
+                variant="ghost"
+                disabled={busy}
+                onClick={() => onReject(t._id)}
+                aria-label="Reject"
+              >
                 <X size={15} className="text-red-500" />
               </Button>
             )}

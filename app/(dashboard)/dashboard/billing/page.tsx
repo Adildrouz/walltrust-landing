@@ -13,6 +13,7 @@ import {
   UpgradeButton,
   ManageSubscriptionButton,
 } from "@/components/billing/BillingActions";
+import { PlanSyncOnSuccess } from "@/components/billing/PlanSyncOnSuccess";
 
 const planMeta: Record<PlanName, { name: string; price: string; perks: string[] }> = {
   free: {
@@ -53,13 +54,14 @@ export default async function BillingPage() {
 
   return (
     <div>
+      <PlanSyncOnSuccess />
       <PageHeader title="Billing" description="Manage your plan. Cancel anytime in one click." />
       <div className="space-y-6 p-6">
         {/* Current plan */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0">
             <CardTitle className="text-base">Current plan</CardTitle>
-            <Badge className="capitalize">{planMeta[plan].name}</Badge>
+            <Badge className="capitalize" data-testid="current-plan-badge">{planMeta[plan].name}</Badge>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="text-3xl font-semibold">{planMeta[plan].price}</div>
@@ -72,7 +74,7 @@ export default async function BillingPage() {
 
             <div className="grid grid-cols-2 gap-4 sm:max-w-md">
               <div className="rounded-md border border-slate-200 p-3">
-                <div className="text-lg font-semibold">
+                <div className="text-lg font-semibold" data-testid="testimonials-usage">
                   {usageLabel(testimonialCount, limits.testimonials)}
                 </div>
                 <div className="text-xs text-muted-foreground">Testimonials</div>

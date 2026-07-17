@@ -177,16 +177,23 @@ export function PagesManager({
           {pages.map((p) => {
             const link = `${baseUrl}/c/${p.slug}`;
             return (
-              <Card key={p._id}>
+              <Card key={p._id} data-testid="page-row" data-slug={p.slug}>
                 <CardContent className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium">{p.title}</span>
+                      <span className="font-medium" data-testid="page-title">
+                        {p.title}
+                      </span>
                       <Badge variant={p.isActive ? "default" : "secondary"}>
                         {p.isActive ? "Active" : "Inactive"}
                       </Badge>
                     </div>
-                    <div className="mt-1 truncate text-sm text-muted-foreground">/c/{p.slug}</div>
+                    <div
+                      className="mt-1 truncate text-sm text-muted-foreground"
+                      data-testid="page-slug"
+                    >
+                      /c/{p.slug}
+                    </div>
                     <div className="mt-1 text-xs text-muted-foreground">
                       {p.testimonialCount} testimonial{p.testimonialCount === 1 ? "" : "s"}
                     </div>
@@ -201,10 +208,20 @@ export function PagesManager({
                         <ExternalLink size={15} />
                       </a>
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => openEdit(p)}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => openEdit(p)}
+                      data-testid="edit-page-button"
+                    >
                       <Pencil size={15} />
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => remove(p)}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => remove(p)}
+                      data-testid="delete-page-button"
+                    >
                       <Trash2 size={15} className="text-red-500" />
                     </Button>
                   </div>

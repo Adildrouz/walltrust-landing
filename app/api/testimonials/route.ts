@@ -8,6 +8,7 @@ import User from "@/models/User";
 import { uploadImage } from "@/lib/cloudinary";
 import { sendNewTestimonialEmail } from "@/lib/resend";
 import { PLAN_LIMITS } from "@/lib/utils";
+import { isRateLimited, clientIp } from "@/lib/rate-limit";
 
 // GET — authenticated owner list, with optional filters
 export async function GET(req: Request) {
@@ -44,6 +45,14 @@ const submitSchema = z.object({
 });
 
 export async function POST(req: Request) {
+  // 10 submissions per IP per 10 minutes — stops bot floods on public collection pages
+  if (isRateLimited(clientIp(req), 10, 10 * 60_000, req)) {
+    return NextResponse.json(
+      { error: "Too many requests. Please try again later." },
+      { status: 429 }
+    );
+  }
+
   try {
     const body = await req.json();
     const parsed = submitSchema.safeParse(body);
